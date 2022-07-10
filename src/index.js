@@ -1,160 +1,44 @@
 module.exports = function toReadable (number) {
-    const { rsort } = require("semver");
-
-    module.exports = function toReadable(number) {
-        const num = parseInt(number);
-        const str = String(number).split('');
+ 
+    let num = number.toString();
     
-        if (parseInt(number) === 0) {
-            return 'zero';
-        }
-    
-        if (num >= 1 && num <= 9) {
-            return numOneToNine(num);
-        }
-    
-        if (num >= 10 && num <= 19) {
-            return numTenToNineteen(num)
-        }
-    
-        if (num >= 20 && num <= 100) {
-            if (str[1] === '0') {
-                return numTwentyToNinetyNine(num);
-            } else {
-                let result = ''.concat(numTwentyToNinetyNine(str[0] + 0), ' ', numOneToNine(str[1]));
-                return result.trimEnd();
-            }
-        }
-    
-        if (num >= 101 && num < 1000) {
-            if ((str[2] >= 0 && str[2] <= 9) && (str[1] == 1)) {
-                return ''.concat(numOneToNine(str[0]), ' hundred ', numTenToNineteen(1 + str[2]));
-            }
-            let result = ''.concat(numOneToNine(str[0]), ' hundred ', numTwentyToNinetyNine(str[1] + 0), ' ', numOneToNine(str[2]));
-            return result.trimEnd().replace('  ', ' ');
-        }
+  
+    let ones = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    let tenToNineteen = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    let tens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    let hundreds = ['one hundred', 'two hundred', 'three hundred', 'four hundred', 'five hundred', 'six hundred', 'seven hundred', 'eight hundred', 'nine hundred'];  
+  
+    if (num.length === 1) {
+      return ones[+(num[0])]
+  }
+  
+  else if (num.length === 2) {
+    if (num[0] === '1') {
+      return tenToNineteen[+(num[1])];
     }
-    
-    function numOneToNine(number) {
-        if (parseInt(number) === 1) {
-            return 'one';
-        }
-    
-        if (parseInt(number) === 2) {
-            return 'two';
-        }
-    
-        if (parseInt(number) === 3) {
-            return 'three';
-        }
-    
-        if (parseInt(number) === 4) {
-            return 'four';
-        }
-    
-        if (parseInt(number) === 5) {
-            return 'five';
-        }
-    
-        if (parseInt(number) === 6) {
-            return 'six';
-        }
-    
-        if (parseInt(number) === 7) {
-            return 'seven';
-        }
-    
-        if (parseInt(number) === 8) {
-            return 'eight';
-        }
-    
-        if (parseInt(number) === 9) {
-            return 'nine';
-        }
-    
-        return '';
+    else if(num[0] !== '1' && num[1] === '0') {
+      return tens[+(num[0]) - 2];
     }
-    
-    function numTenToNineteen(number) {
-        if (parseInt(number) === 10) {
-            return 'ten';
-        }
-    
-        if (parseInt(number) === 11) {
-            return 'eleven';
-        }
-    
-        if (parseInt(number) === 12) {
-            return 'twelve';
-        }
-    
-        if (parseInt(number) === 13) {
-            return 'thirteen';
-        }
-    
-        if (parseInt(number) === 14) {
-            return 'fourteen';
-        }
-    
-        if (parseInt(number) === 15) {
-            return 'fifteen';
-        }
-    
-        if (parseInt(number) === 16) {
-            return 'sixteen';
-        }
-    
-        if (parseInt(number) === 17) {
-            return 'seventeen';
-        }
-    
-        if (parseInt(number) === 18) {
-            return 'eighteen';
-        }
-    
-        if (parseInt(number) === 19) {
-            return 'nineteen';
-        }
-        return '';
+    else if (num[0] !== '1' && num[1] !== '0') {
+      return tens[+(num[0]) - 2] + ' ' + ones[+(num[1])];
     }
-    
-    function numTwentyToNinetyNine(number) {
-        if (parseInt(number) === 20) {
-            return 'twenty';
-        }
-    
-        if (parseInt(number) === 30) {
-            return 'thirty';
-        }
-    
-        if (parseInt(number) === 40) {
-            return 'forty';
-        }
-    
-        if (parseInt(number) === 50) {
-            return 'fifty';
-        }
-    
-        if (parseInt(number) === 60) {
-            return 'sixty';
-        }
-    
-        if (parseInt(number) === 70) {
-            return 'seventy';
-        }
-    
-        if (parseInt(number) === 80) {
-            return 'eighty';
-        }
-    
-        if (parseInt(number) === 90) {
-            return 'ninety';
-        }
-    
-        if (parseInt(number) === 100) {
-            return 'one hundred';
-        }
-    
-        return '';
+  }
+  
+  else if (num.length === 3) {
+    if (num[1] === '0' && num[2] === '0') {
+      return hundreds[+(num[0]) - 1];
     }
-}
+    else if (num[1] === '0' && num[2] !== '0') {
+      return hundreds[+(num[0]) - 1] + ' ' + ones[+(num[2])];
+    }
+    else if (num[1] === '1') {
+      return hundreds[+(num[0]) - 1] + ' ' + tenToNineteen[+(num[2])];
+    }
+    else if (num[1] !== '1' && num[2] === '0') {
+      return hundreds[+(num[0]) - 1] + ' ' + tens[+(num[1]) - 2];
+    }
+    else if (num[1] !== '1' && num[2] !== '0') {
+      return hundreds[+(num[0]) - 1] + ' ' + tens[+(num[1]) - 2] + ' ' + ones[+(num[2])];
+    }
+  }
+  }
